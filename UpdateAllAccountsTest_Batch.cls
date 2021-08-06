@@ -13,7 +13,7 @@ public with sharing class UpdateAllAccountsTest_Batch {
         insert myProduct;
   
         PricebookEntry pbe = new PricebookEntry();
-        pbe.Pricebook2Id = Test.getStandardPricebookId();
+        pbe.Pricebook2Id = Test.getStandardPricebookId();//standard method of SF which allow us to directly create a Pricebook
         pbe.Product2Id = myProduct.Id;
         pbe.UnitPrice = 1020;
         pbe.IsActive = true;
@@ -32,12 +32,11 @@ public with sharing class UpdateAllAccountsTest_Batch {
         
         List<Account> lAcc = [SELECT Id, chiffre_d_affaire__c from Account where Id =: updateAccountTest.Id];
 
-        UpdateAllAccounts_Batch updateAccount = new UpdateAllAccounts_Batch();//Must normally update the turnover of our acc
+        UpdateAllAccounts_Batch updateAccount = new UpdateAllAccounts_Batch();//Must normally update the turnover of all our acc
         Database.QueryLocator ql = updateAccount.start(null);
         updateAccount.execute(null, lAcc);
         updateAccount.finish(null);
         Account acc = [SELECT Id, chiffre_d_affaire__c from Account where Name = 'Lepicier'];
-
         System.debug('The turnover of account is: ' + acc.chiffre_d_affaire__c + ' euros.');
     }
 }

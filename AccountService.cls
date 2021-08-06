@@ -1,3 +1,5 @@
+// Class which contains the update method of the accounts turnover 
+
 public class AccountService {
       public static void updateChiffreAffaires(List<Account> scope) {
 
@@ -21,5 +23,5 @@ public class AccountService {
        }
        update scope;
     }
-    public class AccountServiceException extends Exception {}
+    public class AccountServiceException extends Exception {} // retrieve, if necessary any exception
 }

@@ -1,18 +1,13 @@
+/* Trigger of update of turnover of an account, 
+after the update of a related order to this account */
+
 trigger AccountUpdateTriggerr on Order (after update) {
     set<Id> setAccountIds = new set<Id>();
-    List<Id> accountIds = new List<Id>{};
     List<Account> accsToUpdate = new List<Account>{};
  
- for(integer i=0; i< trigger.new.size(); i++){
-    Order newOrder= trigger.new[i];
-        accountIds.add(newOrder.AccountId); // compile list of Ids found in the "AccouintId" field       
-
-// compiles and loops through list of Accounts found in Id list from above
-for(Account a: [SELECT Id, Chiffre_d_affaire__c FROM Account WHERE Id =:newOrder.AccountId]){
-    a.Chiffre_d_affaire__c = a.Chiffre_d_affaire__c + newOrder.TotalAmount;
-        accstoUpdate.add(a);
+    for(Order o : Trigger.new){
+   setAccountIds.add(o.AccountId); 
 }
-if(!accsToUpdate.isEmpty())
-    update accsToUpdate;
-}
+accsToUpdate = [SELECT Id, Chiffre_d_affaire__c FROM Account WHERE Id IN: setAccountIds];
+AccountService.updateChiffreAffaires(accsToUpdate);
 }
